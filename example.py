@@ -12,12 +12,12 @@ with open("security_token.txt", "r") as f:
 app = TeleBot(token)
 
 @app.handle_message(filters.TEXT & ~filters.COMMAND)
-async def receivechatid(update, context):
+async def handle_message(update, context):
     lastmessage = update.message.text
     await update.message.reply_text(f"echo : {lastmessage}")
 
 @app.handle_command("chatid")
-async def receivechatid(update, context):
+async def getchatid(update, context):
     chatid = update.effective_message.chat_id
 
     print(f"[request] /chatid : {chatid}")
