@@ -1,3 +1,4 @@
+import requests
 import asyncio
 from telegram import ForceReply, Update
 from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters
@@ -6,6 +7,7 @@ class TeleBot:
     def __init__(self, token:str):
         self.app = Application.builder().token(token).build()
         self.bot = self.app.bot
+        self.send_url = f'https://api.telegram.org/bot{token}/sendMessage'
 
     def handle_command(self, text):
         def decorator(func):
@@ -20,7 +22,7 @@ class TeleBot:
         return decorator
         
     async def __send_message(self, text, chat_id):
-        await self.bot.send_message(chat_id, text=text)
+        requests.post(self.send_url, json={'chat_id': chat_id, 'text': text})
 
     def send_to_user(self, text, target):
         asyncio.run(self.__send_message(text=text, chat_id=target))
